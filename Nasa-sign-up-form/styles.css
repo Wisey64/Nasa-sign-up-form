@@ -1,0 +1,71 @@
+body{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0px;
+    background-color: rgba(0, 0, 0, 0.075);
+    
+}
+.right{
+    width: 1800px;
+    height: 700px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:center;
+    align-items: center;
+    order: 2;
+    
+    
+    
+}
+.fdiv{
+    background-color: rgba(0, 0, 0, 0.13);
+    display: flex;
+    gap: 15px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    width: 850px;
+    
+    height: 400px;
+    
+
+}
+.inputs{
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    
+}
+.moon{
+    width: 875px ;
+    height: 950px;
+}
+.left{
+    background-image: url(nasa-pd4lo70LdbI-unsplash.jpg);
+    width: 1800px; ; /* Set the width of the div */
+    height: 934px; /* Set the height of the div */
+    background-size: cover; /* Makes the image cover the entire div */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  order: 1;
+}
+.top{
+    
+    width: 900px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+.first{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
