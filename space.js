@@ -3,7 +3,10 @@ import * as THREE from "three";
 /* ------------------------------------------------------------------
    Settings you can play with
 ------------------------------------------------------------------- */
-const MOON_TEXTURE = "moon.jpg";
+// Loaded from a CDN so you do not have to upload an image. To use your own picture instead,
+// add it to the repo and put its file name here, e.g. "moon.jpg".
+const MOON_TEXTURE =
+  "https://cdn.jsdelivr.net/gh/mrdoob/three.js@r170/examples/textures/planets/moon_1024.jpg";
 const SECONDS_PER_TURN = 240;   // one full spin every 4 minutes. Bigger number = slower.
 const AXIS_TILT_DEG = 8;        // lean of the moon's spin axis
 const MOON_SIZE = 0.47;         // moon radius as a fraction of its area's smaller side
@@ -75,7 +78,7 @@ function init() {
       moon.visible = true;
     },
     undefined,
-    (err) => console.error(`Could not load ${MOON_TEXTURE}. Are you running a local server?`, err)
+    (err) => console.error(`Could not load the moon texture: ${MOON_TEXTURE}`, err)
   );
 
   /* ---------------- Light (fixed) ---------------- */
