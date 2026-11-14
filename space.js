@@ -3,10 +3,14 @@ import * as THREE from "three";
 /* ------------------------------------------------------------------
    Settings you can play with
 ------------------------------------------------------------------- */
-// Loaded from a CDN so you do not have to upload an image. To use your own picture instead,
-// add it to the repo and put its file name here, e.g. "moon.jpg".
-const MOON_TEXTURE =
-  "https://cdn.jsdelivr.net/gh/mrdoob/three.js@r170/examples/textures/planets/moon_1024.jpg";
+// Moon map, loaded from a CDN so you don't have to upload any images.
+// The first one is sharp (4096 x 2048). If it ever fails to load, the next one is used.
+// Credit: Solar System Scope (CC BY 4.0), based on NASA imagery - keep the credit line in index.html.
+// To use your own picture, add it to the repo and put its file name first, e.g. "moon.jpg".
+const MOON_TEXTURES = [
+  "https://cdn.jsdelivr.net/gh/FutureNathan/valuemaps@89bb6b6bcacb839149b7c5d78b63936ef4bb95cb/public/tex-moon-hi.jpg",
+  "https://cdn.jsdelivr.net/gh/mrdoob/three.js@r170/examples/textures/planets/moon_1024.jpg", // backup, softer
+];
 const SECONDS_PER_TURN = 240;   // one full spin every 4 minutes. Bigger number = slower.
 const AXIS_TILT_DEG = 8;        // lean of the moon's spin axis
 const MOON_SIZE = 0.47;         // moon radius as a fraction of its area's smaller side
@@ -14,7 +18,7 @@ const PX_PER_STAR = 700;        // one star per this many screen pixels (smaller
 const STAR_MAX = 4000;          // upper limit, for very large screens
 const PARALLAX_PX = 14;         // how far the view drifts with the mouse (0 = off)
 const LIGHT_INTENSITY = 3.4;    // brightness of the sunlit side
-const BUMP_SCALE = 0.6;         // crater/terrain relief along the day/night line
+const BUMP_SCALE = 0.35;        // crater/terrain relief along the day/night line (0 = flat)
 const FOV = 20;                 // low field of view = flatter, more "telescope" look
 
 // The sun is to the lower-left, like in the original photo (x = right, y = up, z = toward you)
@@ -67,19 +71,26 @@ function init() {
   moonRig.add(tilt);
   scene.add(moonRig);
 
-  new THREE.TextureLoader().load(
-    MOON_TEXTURE,
-    (texture) => {
-      texture.colorSpace = THREE.SRGBColorSpace;
-      texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-      moonMaterial.map = texture;
-      moonMaterial.bumpMap = texture; // brightness doubles as relief, so craters catch the light
-      moonMaterial.needsUpdate = true;
-      moon.visible = true;
-    },
-    undefined,
-    (err) => console.error(`Could not load the moon texture: ${MOON_TEXTURE}`, err)
-  );
+  const textureLoader = new THREE.TextureLoader();
+  function loadMoonTexture(i) {
+    textureLoader.load(
+      MOON_TEXTURES[i],
+      (texture) => {
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        moonMaterial.map = texture;
+        moonMaterial.bumpMap = texture; // brightness doubles as relief, so craters catch the light
+        moonMaterial.needsUpdate = true;
+        moon.visible = true;
+      },
+      undefined,
+      (err) => {
+        console.warn(`Could not load moon texture: ${MOON_TEXTURES[i]}`, err);
+        if (i + 1 < MOON_TEXTURES.length) loadMoonTexture(i + 1); // try the backup
+      }
+    );
+  }
+  loadMoonTexture(0);
 
   /* ---------------- Light (fixed) ---------------- */
   const sun = new THREE.DirectionalLight(0xffffff, LIGHT_INTENSITY);
