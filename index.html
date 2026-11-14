@@ -25,3 +25,63 @@
     <main class="page">
 
         <!-- The moon is drawn behind this area, centred on it -->
+        <section class="left" id="moon-area">
+            <div class="nasa">
+                <img src="pngkey.com-nasa-png-2637160.png" alt="NASA logo" class="logo">
+            </div>
+        </section>
+
+        <section class="right">
+            <div class="top">
+                <h1 class="quote">Reach For The Stars</h1>
+            </div>
+
+            <form action="#" method="post">
+        <div class="fdiv">
+            <h2>Join Us Now</h2>
+            <div class="inputs">
+                <div class="first">
+                    <div class="fname form-group">
+                        <input type="text" id="firstname" name="firstname" required minlength="2" maxlength="10">
+                        <label for="firstname">*FIRST NAME:</label>
+                    </div>
+                    <div class="lname form-group">
+                        <input type="text" id="lastname" name="lastname" required minlength="2" maxlength="10">
+                        <label for="lastname">*LAST NAME</label>
+                    </div>
+                </div>
+                <div class="second">
+                    <div class="mail form-group">
+                        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                        <label for="email">*EMAIL</label>
+                    </div>
+                    <div class="pnumber form-group">
+                        <input type="number" id="phone" name="phone" required minlength="8" maxlength="10" >
+                        <label for="phone">*PHONE NUMBER</label>
+                    </div>
+                </div>
+                <div class="third">
+                    <div class="pword form-group">
+                        <input type="password" id="pass" name="pass" required minlength="8" maxlength="10">
+                        <label for="pass">*PASSWORD</label>
+                    </div>
+                    <div class="cpword form-group">
+                        <input type="password" id="confirm" name="confirm" required minlength="8" maxlength="10">
+                        <label for="confirm">*CONFIRM PASSWORD</label>
+                    </div>
+                </div>
+                
+            </div>
+        
+            <button type="submit">Create Account</button>
+
+            <p>Already have an account? <a href="">Log in</a></p>
+        </div>
+    </form>
+        </section>
+
+    </main>
+
+    <script type="module" src="space.js"></script>
+</body>
+</html>
