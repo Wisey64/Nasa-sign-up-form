@@ -1,24 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="styles.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>sign up form</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- lets space.js say: import ... from "three" -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"
+        }
+    }
+    </script>
 </head>
 <body>
 
-    
-<div class="right">
-    <div class="top">
-        <h1 class="quote">Reach For The Stars</h1>
-        
-    </div>
-    
-        
-    <form action="#" method="post">
+    <!-- The whole page background: 3D stars + moon (drawn by space.js) -->
+    <canvas id="space" aria-hidden="true"></canvas>
+
+    <main class="page">
+
+        <!-- The moon is drawn behind this area, centred on it -->
+        <section class="left" id="moon-area">
+            <div class="nasa">
+                <img src="pngkey.com-nasa-png-2637160.png" alt="NASA logo" class="logo">
+            </div>
+        </section>
+
+        <section class="right">
+            <div class="top">
+                <h1 class="quote">Reach For The Stars</h1>
+            </div>
+
+            <form action="#" method="post">
         <div class="fdiv">
             <h2>Join Us Now</h2>
             <div class="inputs">
@@ -31,12 +49,6 @@
                         <input type="text" id="lastname" name="lastname" required minlength="2" maxlength="10">
                         <label for="lastname">*LAST NAME</label>
                     </div>
-                    
-                    
-                    
-                    
-                    
-                    
                 </div>
                 <div class="second">
                     <div class="mail form-group">
@@ -66,16 +78,10 @@
             <p>Already have an account? <a href="">Log in</a></p>
         </div>
     </form>
-</div>
+        </section>
 
-<div class="left">
-    <img src="nasa-pd4lo70LdbI-unsplash.jpg" alt="Background Image" class="background-img">
+    </main>
 
-    <div class="nasa">
-        <img src="pngkey.com-nasa-png-2637160.png" alt="" class="logo">
-        
-    </div>
-</div>
-    
+    <script type="module" src="space.js"></script>
 </body>
 </html>
