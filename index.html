@@ -29,6 +29,7 @@
             <div class="nasa">
                 <img src="pngkey.com-nasa-png-2637160.png" alt="NASA logo" class="logo">
             </div>
+            <p class="hint">Tap the moon to explore</p>
         </section>
 
         <section class="right">
@@ -83,6 +84,39 @@
         </section>
 
     </main>
+
+    <!-- Explore mode: everything that appears after you tap the moon (driven by space.js, text in moon-data.js) -->
+    <div id="explore" class="explore" inert aria-hidden="true">
+        <div id="explore-stage" class="explore-stage"></div>
+
+        <header class="explore-top">
+            <button type="button" id="explore-back" class="ghost-btn">&larr; Back</button>
+            <h2 class="explore-title">Explore the Moon</h2>
+            <button type="button" id="light-toggle" class="ghost-btn" aria-pressed="false">Full light</button>
+        </header>
+
+        <p id="coords" class="coords" aria-live="polite"></p>
+        <p id="explore-hint" class="explore-hint">Drag to turn the Moon &middot; pinch or scroll to zoom &middot; tap a glowing pin</p>
+        <span id="pin-label" class="pin-label" aria-hidden="true"></span>
+
+        <aside id="explore-panel" class="explore-panel" aria-label="Moon information">
+            <div class="tabs" role="tablist">
+                <button type="button" role="tab" id="tab-sites" class="tab" aria-selected="true" aria-controls="view-sites">Landing sites</button>
+                <button type="button" role="tab" id="tab-facts" class="tab" aria-selected="false" aria-controls="view-facts">Moon facts</button>
+            </div>
+
+            <div id="view-sites" role="tabpanel" aria-labelledby="tab-sites">
+                <div id="site-chips" class="chips"></div>
+                <article id="site-card" class="card" aria-live="polite"></article>
+            </div>
+
+            <div id="view-facts" role="tabpanel" aria-labelledby="tab-facts" hidden>
+                <ul id="facts-list" class="facts"></ul>
+            </div>
+
+            <p class="credit">Moon map: <a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar System Scope</a> (CC BY 4.0), based on NASA imagery. Apollo landing coordinates: NASA.</p>
+        </aside>
+    </div>
 
     <script type="module" src="space.js"></script>
 </body>
