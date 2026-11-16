@@ -217,7 +217,7 @@ input:focus {
     }
 
     .left {
-        position: static;
+        position: relative;
         height: min(92vw, 46vh);
         min-height: 240px;
         padding: 0.5rem;
@@ -232,5 +232,431 @@ input:focus {
 @media (max-width: 480px) {
     button {
         max-width: none; /* full-width button on small phones */
+    }
+}
+
+/* =====================================================================
+   Tap-the-moon hint (sign-up page)
+   ===================================================================== */
+.left.moon-hover {
+    cursor: pointer;
+}
+
+.left:focus-visible {
+    outline: 2px solid rgba(255, 200, 87, 0.8);
+    outline-offset: -4px;
+}
+
+.hint {
+    position: absolute;
+    left: 50%;
+    bottom: 0.6rem;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.9rem;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    color: #fff;
+    background: rgba(8, 8, 14, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    pointer-events: none;
+}
+
+.hint::before {
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: #ffc857;
+    animation: hint-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes hint-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.7); opacity: 0.45; }
+}
+
+/* =====================================================================
+   Switching to explore mode: the form fades away, the moon takes over
+   ===================================================================== */
+.right,
+.left > * {
+    transition: opacity 0.45s ease, visibility 0s linear 0s;
+}
+
+body.exploring {
+    overflow: hidden;
+}
+
+body.exploring .right,
+body.exploring .left > * {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.45s ease, visibility 0s linear 0.45s;
+}
+
+/* let touches and clicks fall through to the 3D canvas underneath */
+body.exploring .page {
+    pointer-events: none;
+}
+
+body.exploring #space {
+    pointer-events: auto;
+    touch-action: none; /* dragging turns the moon instead of scrolling the page */
+    cursor: grab;
+}
+
+body.exploring.dragging #space {
+    cursor: grabbing;
+}
+
+/* =====================================================================
+   Explore mode screen
+   ===================================================================== */
+.explore {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 5;
+    pointer-events: none; /* empty space passes touches to the moon; only the controls below catch them */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0s linear 0.4s;
+    font-family: 'Roboto', sans-serif;
+    --panel-w: min(380px, 40vw);
+}
+
+body.exploring .explore {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease 0.2s, visibility 0s;
+}
+
+.explore [hidden] {
+    display: none !important;
+}
+
+.explore > * {
+    pointer-events: auto;
+}
+
+.explore > .explore-stage,
+.explore > .explore-top,
+.explore > .coords,
+.explore > .explore-hint,
+.explore > .pin-label {
+    pointer-events: none;
+}
+
+.explore-top > button {
+    pointer-events: auto;
+}
+
+/* An empty box: the moon is centred in it while exploring (phone: the space above the info panel) */
+.explore-stage {
+    position: absolute;
+    top: 3.75rem;
+    left: 0;
+    right: 0;
+    bottom: 46vh;
+    bottom: 46dvh;
+}
+
+.explore-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+}
+
+.explore-title {
+    flex: 1;
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(0.9rem, 4vw, 1.2rem);
+    text-shadow: 0 0 14px rgba(0, 0, 0, 0.9);
+}
+
+/* the page's global button style is big and blue, so these reset it first */
+.explore button {
+    margin: 0;
+    width: auto;
+    max-width: none;
+    min-height: 0;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.explore .ghost-btn {
+    min-height: 2.5rem;
+    padding: 0.5rem 0.9rem;
+    background: rgba(8, 8, 14, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 999px;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+}
+
+.explore .ghost-btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.explore .ghost-btn[aria-pressed="true"] {
+    background: rgba(255, 200, 87, 0.25);
+    border-color: #ffc857;
+}
+
+.coords {
+    position: absolute;
+    top: 3.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.35rem 0.8rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    background: rgba(8, 8, 14, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.coords.is-on {
+    opacity: 1;
+}
+
+.explore-hint {
+    position: absolute;
+    left: 50%;
+    bottom: calc(46vh + 0.6rem);
+    bottom: calc(46dvh + 0.6rem);
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: 92vw;
+    text-align: center;
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
+    color: rgba(255, 255, 255, 0.85);
+    text-shadow: 0 0 8px #000;
+    transition: opacity 0.6s ease;
+}
+
+.explore-hint.is-gone {
+    opacity: 0;
+}
+
+/* the name tag that follows the selected pin (moved around by space.js) */
+.pin-label {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.72rem;
+    white-space: nowrap;
+    color: #fff;
+    background: rgba(8, 8, 14, 0.75);
+    border: 1px solid rgba(255, 200, 87, 0.7);
+    border-radius: 999px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    will-change: transform;
+}
+
+/* ---------- Info panel (bottom sheet on phones) ---------- */
+.explore-panel {
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    max-height: calc(46vh - 1rem);
+    max-height: calc(46dvh - 1rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 0.8rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: rgba(8, 8, 14, 0.66);
+    border: 1px solid #fcfcfc55;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+}
+
+.tabs {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.explore .tab {
+    flex: 1;
+    min-height: 2.5rem;
+    padding: 0 0.5rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 4px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.72rem;
+}
+
+.explore .tab:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.explore .tab[aria-selected="true"] {
+    background: rgb(0, 50, 160);
+    border-color: transparent;
+}
+
+/* mission buttons: scroll sideways */
+.chips {
+    display: flex;
+    gap: 0.4rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
+    scrollbar-width: thin;
+}
+
+.explore .chip {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 2.5rem;
+    padding: 0 0.85rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+}
+
+.explore .chip::before {
+    content: "";
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: #ffc857; /* amber = Apollo, with astronauts */
+}
+
+.explore .chip.robot::before {
+    background: #6bd6ff; /* blue = robot mission */
+}
+
+.explore .chip:hover {
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.explore .chip[aria-pressed="true"] {
+    background: rgb(0, 50, 160);
+    border-color: transparent;
+}
+
+.card h3 {
+    margin: 0 0 0.15rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.05rem;
+}
+
+.card p {
+    margin: 0.55rem 0 0;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.card .subtitle {
+    margin-top: 0;
+    font-size: 0.82rem;
+    opacity: 0.85;
+}
+
+.card .meta {
+    margin-top: 0.25rem;
+    font-size: 0.76rem;
+    opacity: 0.7;
+}
+
+.card .fact {
+    padding-left: 0.65rem;
+    border-left: 3px solid #ffc857;
+}
+
+.facts {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.facts li {
+    font-size: 0.88rem;
+    line-height: 1.45;
+}
+
+.facts strong {
+    margin-right: 0.15rem;
+    color: #ffc857;
+}
+
+/* ---------- Wide screens (and phones held sideways): panel on the right, moon on the left ---------- */
+@media (min-width: 901px), (orientation: landscape) and (max-height: 600px) {
+    .explore-stage {
+        top: 3.75rem;
+        bottom: 1rem;
+        right: calc(var(--panel-w) + 1.5rem);
+    }
+
+    .explore-top {
+        right: calc(var(--panel-w) + 1.5rem);
+    }
+
+    .coords,
+    .explore-hint {
+        left: calc((100% - var(--panel-w) - 1.5rem) / 2);
+    }
+
+    .explore-hint {
+        bottom: 1.2rem;
+    }
+
+    .explore-panel {
+        top: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+        left: auto;
+        width: var(--panel-w);
+        max-height: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hint::before {
+        animation: none;
+    }
+
+    .right,
+    .left > *,
+    .explore,
+    body.exploring .explore,
+    body.exploring .right,
+    body.exploring .left > * {
+        transition-duration: 0.01ms !important;
+        transition-delay: 0s !important;
     }
 }
